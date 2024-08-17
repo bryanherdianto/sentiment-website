@@ -14,7 +14,6 @@ const padding = 'post';
 const truncating = 'post';
 
 var myVar;
-// -----------------------------------
 
 function myFunction() {
     myVar = setTimeout(showPage, 3000);
@@ -31,8 +30,10 @@ function detectWebGLContext () {
     // document itself, so it is never displayed in the
     // browser window.
     var canvas = document.createElement("canvas");
+    
     // Get WebGLRenderingContext from canvas element.
     var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    
     // Report the result.
     if (gl && gl instanceof WebGLRenderingContext) {
         console.log("Congratulations! Your browser supports WebGL.");
@@ -44,19 +45,18 @@ function detectWebGLContext () {
 
 detectWebGLContext();
 
-// ----Kolom fungsi `getInput()`-----
+// Kolom fungsi `getInput()`
 // Fungsi untuk mengambil input review
 function getInput(){
     const reviewText = document.getElementById('input')
     return reviewText.value;
 }
-// -----------------------------------
 
-// ----Kolom fungsi `padSequence()`-----
+// Kolom fungsi `padSequence()`
 // Fungsi untuk melakukan padding
 function padSequence(sequences, maxLen, padding='post', truncating = "post", pad_value = 0){
     return sequences.map(seq => {
-        if (seq.length > maxLen) { //truncat
+        if (seq.length > maxLen) {
             if (truncating === 'pre'){
                 seq.splice(0, seq.length - maxLen);
             } else {
@@ -78,10 +78,9 @@ function padSequence(sequences, maxLen, padding='post', truncating = "post", pad
         return seq;
         });
 }
-// -----------------------------------
 
 
-// ----Kolom fungsi `predict()`-----
+// Kolom fungsi `predict()`
 // Fungsi untuk melakukan prediksi
 function predict(inputText){
 
@@ -90,7 +89,7 @@ function predict(inputText){
         let indexed = word2index[word];
 
         if (indexed === undefined){
-            return 1; //change to oov value
+            return 1; // Change to oov value
         }
         return indexed;
     });
@@ -107,11 +106,9 @@ function predict(inputText){
     return score;  
 
 }
-// -----------------------------------
 
-
-// ----Kolom fungsi `onClick()`-----
-// Fungsi yang dijalankan ketika tombol "Post Review" diclick
+// Kolom fungsi `onClick()`
+// Fungsi yang dijalankan ketika tombol "Post Review" diklik
 function onClick(){
     
     if(!isModelLoaded) {
@@ -128,7 +125,7 @@ function onClick(){
     // 
     const inputText = getInput().trim().toLowerCase().split(" ");
 
-    // Score prediksi dengan nilai 0 s/d 1 
+    // Score prediksi dengan nilai 0 - 1 
     let score = predict(inputText); 
 
     // Kondisi penentuan hasil prediksi berdasarkan nilai score
@@ -138,23 +135,19 @@ function onClick(){
         alert ('Negative Review \n'+score);
     }
 }
-// -----------------------------------
 
-
-// ----Kolom fungsi `init()`-----
+// Kolom fungsi `init()`
 async function init(){
-
     // Memanggil model tfjs
     // model = await tf.loadLayersModel('http://127.0.0.1:5500/tfjs_model/model.json'); // Untuk VS Code Live Server
-    model = await tf.loadLayersModel('http://127.0.0.1:8887/tfjs_model/model.json');
+    model = await tf.loadLayersModel('https://bryanherdianto.github.io/sentiment-website/tfjs_model/model.json');
     isModelLoaded = true;
 
-    //Memanggil word_index
+    // Memanggil word_index
     // const word_indexjson = await fetch('http://127.0.0.1:5500/word_index.json'); // Untuk VS Code Live Server
-    const word_indexjson = await fetch('http://127.0.0.1:8887/word_index.json'); 
+    const word_indexjson = await fetch('https://bryanherdianto.github.io/sentiment-website/word_index.json'); 
     word2index = await word_indexjson.json();
 
     console.log(model.summary()); 
     console.log('Model & Metadata Loaded Succesfully');
 }
-// -----------------------------------
